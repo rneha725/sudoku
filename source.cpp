@@ -24,7 +24,6 @@ public:
     int value;
     bool writable;
     sudokuCell(){}
-    // sudokuCell(int a) {value=a; writable=FALSE;}
     void readCell(int a) {value=a; writable=FALSE;}
     inline void fillCell(int a) {value=a;writable=TRUE;}
 }cell[SIZE][SIZE];
@@ -37,7 +36,6 @@ bool checkSafe(int i, int j, int trialNumber)
     int boxCol, boxRow;
     boxCol = ((int)j/WIDTH_BOX)*WIDTH_BOX;
     boxRow = ((int)i/HEIGHT_BOX)*HEIGHT_BOX;
-    // cout<<boxCol<<" "<<boxRow<<endl;
     for(int k=boxCol;k<boxCol+WIDTH_BOX;k++)
     {
         for(int l=boxRow; l<boxRow + HEIGHT_BOX;l++)
@@ -153,7 +151,6 @@ void displaySudoku()
         FOR(j,SIZE)
         {
             cout<<getCell(i,j)<<" | ";
-            // cout<<cell[i][j].writable;
         }
         cout<<"\n";
     }
@@ -164,7 +161,7 @@ int main()
     memset(cell, 0, SIZE*SIZE*sizeof(sudokuCell));
     inputSudoku();
     fillSudoku();
-    // cout<<checkSafe(4,8,2);
     displaySudoku();
+    cout<<"get ready for gui !!!  "<<endl<<"coming soon";
     return 0;
 }
