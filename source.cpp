@@ -24,7 +24,8 @@ public:
     int value;
     bool writable;
     sudokuCell(){}
-    sudokuCell(int a) {value=a; writable=FALSE;}
+    // sudokuCell(int a) {value=a; writable=FALSE;}
+    void readCell(int a) {value=a; writable=FALSE;}
     inline void fillCell(int a) {value=a;writable=TRUE;}
 }cell[SIZE][SIZE];
 
@@ -32,12 +33,14 @@ int getCell(int i, int j) {return cell[i][j].value;}
 
 bool checkSafe(int i, int j, int trialNumber)
 {
+    if(i>SIZE-1 || j>SIZE-1 || i<0 || j<0) return FALSE;
     int boxCol, boxRow;
     boxCol = ((int)j/WIDTH_BOX)*WIDTH_BOX;
     boxRow = ((int)i/HEIGHT_BOX)*HEIGHT_BOX;
-    IFOR(k, boxCol, boxCol + WIDTH_BOX)
+    // cout<<boxCol<<" "<<boxRow<<endl;
+    for(int k=boxCol;k<boxCol+WIDTH_BOX;k++)
     {
-        IFOR(l, boxRow, boxRow + HEIGHT_BOX)
+        for(int l=boxRow; l<boxRow + HEIGHT_BOX;l++)
         {
             if((i==l && j!=k) || (j==k && i!=l))
             {
@@ -46,80 +49,101 @@ bool checkSafe(int i, int j, int trialNumber)
         }
     }
 
-            #ifdef DEBUG
-            cout<<"\nNot in Box.";
-            #endif
-
-    FOR(l, SIZE)
+    for(int l=0;l<SIZE;l++)
     {
         if((i!=l && (getCell(l,j)==trialNumber))) return FALSE;
     }
 
-            #ifdef DEBUG
-            cout<<"\nNot in row.";
-            #endif
-
-    FOR(l, SIZE)
+    for(int l=0;l<SIZE;l++)
     {
         if((j!=l && (getCell(i,l) == trialNumber))) return FALSE;
     }
-
-            #ifdef DEBUG
-            cout<<"\nNot in column also.";
-            #endif
-
     return TRUE;
+}
+
+
+void insert(int i,int j,int val)
+{
+    cell[i][j].readCell(val);
 }
 
 void inputSudoku()
 {
-
-    FOR(i,SIZE)
-    FOR(j,SIZE) cell[i][j].writable=TRUE;
+    int i,j;
+    for(i=0;i<SIZE;i++)
+    {
+        for(j=0;j<SIZE;j++)
+        {
+            cell[i][j].fillCell(0);
+        }
+    }
+    cell[0][1].readCell(6);
+    cell[0][3].readCell(3);
+    cell[0][6].readCell(8);
+    cell[0][8].readCell(4);
+    cell[1][0].readCell(5);
+    cell[1][1].readCell(3);
+    cell[1][2].readCell(7);
+    cell[1][4].readCell(9);
+    cell[2][1].readCell(4);
+    cell[2][5].readCell(6);
+    cell[2][6].readCell(3);
+    cell[2][8].readCell(7);
+    insert(3,1,9);
+    insert(3,4,5);
+    insert(3,1,9);
+    insert(3,6,2);
+    insert(3,7,3);
+    insert(3,8,8);
+    insert(5,0,7);
+    insert(5,1,1);
+    insert(5,2,3);
+    insert(5,3,6);
+    insert(5,4,2);
+    insert(5,7,4);
+    insert(6,0,3);
+    insert(6,2,6);
+    insert(6,3,4);
+    insert(6,7,1);
+    insert(7,4,6);
+    insert(7,6,5);
+    insert(7,7,2);
+    insert(7,8,3);
+    insert(8,0,1);
+    insert(8,2,2);insert(8,5,9);insert(8,7,8);
 }
 
-/*
-*This function will fill Sudoku with appropriate numbers using backtracking
-*3rd argument is used in case when a wrong number is filled previously.
-*/
-void fillSudoku(int i, int j, int except)
+bool findUnassigned(int &row, int &col)
 {
-    //if current cell cannot be edited i.e. given by user then fill next cell.
-    if(cell[i][j].writable==FALSE) return fillSudoku(i,j+1,0);
-
-    if(j==-1) {i--;j=0; if(i==-1){return;}}
-    else if(j==SIZE) {i++;j=0;}
-    if(i==SIZE) {return;}
-
-    /*
-    *trialNumber would be increased in each while loop, if this trialNumber
-    *can be filled in current cell; then fillSudoku is called for next cell.
-    */
-    int trialNumber=1;
-    while(trialNumber <= SIZE)
+    for(col=0;col<SIZE;col++)
     {
-        if(trialNumber!=except && cell[i][j].writable==1 && checkSafe(i,j,trialNumber))
+        for(row=0;row<SIZE;row++)
         {
-            cell[i][j].fillCell(trialNumber);
-            cout<<"i= "<<i<<" j= "<<j<<" numberFilled= "<<trialNumber<<endl;
-            return fillSudoku(i,j+1,0);
+            if(getCell(row,col)==0) {cout<<"row= col="<<row<<" "<<col<<"\n";return TRUE;}
         }
-        else trialNumber++;
     }
-    if(trialNumber > SIZE)
+    return FALSE;
+}
+
+bool fillSudoku()
+{
+    int row, col;
+    if(!findUnassigned(row, col))
     {
-        /*
-        *if trialNumber cannot be filled the backtrack to previous cell and use
-        *except argument as the number that cannot be given the previous cell
-        *again(i.e. current value of that cell).
-        */
-        int exc;
-        if(j==0 && i==0) return;
-        if(j==0) {i--; exc=getCell(i,j);}
-        else exc = getCell(i,j-1);
-        cout<<"\nB. i= "<<i<<" j= "<<j<<" except= "<<exc<<endl;
-        return fillSudoku(i,j-1,exc);
+        return TRUE;
     }
+    cout<<"row = "<<row<<" "<<col<<endl;
+    int num;
+    for(num=1;num<SIZE+1;num++)
+    {
+            if(checkSafe(row,col,num))
+            {
+                cell[row][col].fillCell(num);
+                if(fillSudoku()) return TRUE;
+                cell[row][col].fillCell(0);
+            }
+    }
+    return FALSE;
 }
 
 void displaySudoku()
@@ -139,7 +163,8 @@ int main()
 {
     memset(cell, 0, SIZE*SIZE*sizeof(sudokuCell));
     inputSudoku();
-    fillSudoku(0,0,0);
+    fillSudoku();
+    // cout<<checkSafe(4,8,2);
     displaySudoku();
     return 0;
 }
