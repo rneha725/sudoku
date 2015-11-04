@@ -4,6 +4,8 @@
 
 using namespace std;
 
+
+//Macros used.
 #define FOR(i,n) for(int i=0;i<n;i++)
 #define IFOR(i,a,n) for(int i=a;i<n;i++)
 #define FOR_(i,n) for(int i=n;i>0;i--)
@@ -12,30 +14,37 @@ using namespace std;
 #define i(n) cin>>n
 #define o(n) cout<<n
 
+//Sudoku Dimensions
 #define SIZE 9
 #define FALSE 0
 #define TRUE 1
 #define HEIGHT_BOX 3
 #define WIDTH_BOX 3
 
+//Cell class.
 class sudokuCell
 {
 public:
     int value;
     bool writable;
     sudokuCell(){}
-    void readCell(int a) {value=a; writable=FALSE;}
-    inline void fillCell(int a) {value=a;writable=TRUE;}
+    void readCell(int a) {value=a; writable=FALSE;} // used to insert values from user
+    inline void fillCell(int a) {value=a;writable=TRUE;} // used to insert a writable cell
 }cell[SIZE][SIZE];
 
+//To take the value of a particular cell in the grid
 int getCell(int i, int j) {return cell[i][j].value;}
 
+//Function to check whether a nunmber is valid for the box, row and column.
 bool checkSafe(int i, int j, int trialNumber)
 {
     if(i>SIZE-1 || j>SIZE-1 || i<0 || j<0) return FALSE;
+    //box is the sub-grids in which a number cannot be repeated.
     int boxCol, boxRow;
     boxCol = ((int)j/WIDTH_BOX)*WIDTH_BOX;
     boxRow = ((int)i/HEIGHT_BOX)*HEIGHT_BOX;
+
+    //For checking in a box.
     for(int k=boxCol;k<boxCol+WIDTH_BOX;k++)
     {
         for(int l=boxRow; l<boxRow + HEIGHT_BOX;l++)
@@ -47,11 +56,13 @@ bool checkSafe(int i, int j, int trialNumber)
         }
     }
 
+    //Checking in jth column.
     for(int l=0;l<SIZE;l++)
     {
         if((i!=l && (getCell(l,j)==trialNumber))) return FALSE;
     }
 
+    //Checking in ith row.
     for(int l=0;l<SIZE;l++)
     {
         if((j!=l && (getCell(i,l) == trialNumber))) return FALSE;
@@ -59,12 +70,14 @@ bool checkSafe(int i, int j, int trialNumber)
     return TRUE;
 }
 
-
+//Temporary function for inserting manual values by the program;
+//for now program is the user.
 void insert(int i,int j,int val)
 {
     cell[i][j].readCell(val);
 }
 
+//Manual input in program
 void inputSudoku()
 {
     int i,j;
@@ -111,6 +124,9 @@ void inputSudoku()
     insert(8,2,2);insert(8,5,9);insert(8,7,8);
 }
 
+
+//Function to find next unassigned writable value in the grid; also
+//to check if grid is full or not.
 bool findUnassigned(int &row, int &col)
 {
     for(col=0;col<SIZE;col++)
@@ -123,14 +139,18 @@ bool findUnassigned(int &row, int &col)
     return FALSE;
 }
 
+
+//Main solver function
 bool fillSudoku()
 {
     int row, col;
+    //Check whether grid is filled; if not then return first unassigned value
     if(!findUnassigned(row, col))
     {
         return TRUE;
     }
-    cout<<"row = "<<row<<" "<<col<<endl;
+    
+    //Backtracking is used here.
     int num;
     for(num=1;num<SIZE+1;num++)
     {
@@ -144,6 +164,7 @@ bool fillSudoku()
     return FALSE;
 }
 
+//Displays Sudoku.
 void displaySudoku()
 {
     FOR(i,SIZE)
@@ -162,6 +183,5 @@ int main()
     inputSudoku();
     fillSudoku();
     displaySudoku();
-    cout<<"get ready for gui !!!  "<<endl<<"coming soon";
     return 0;
 }
