@@ -21,19 +21,7 @@ using namespace std;
 #define HEIGHT_BOX 3
 #define WIDTH_BOX 3
 
-//Cell class.
-class sudokuCell
-{
-public:
-    int value;
-    bool writable;
-    sudokuCell(){}
-    void readCell(int a) {value=a; writable=FALSE;} // used to insert values from user
-    inline void fillCell(int a) {value=a;writable=TRUE;} // used to insert a writable cell
-}cell[SIZE][SIZE];
-
-//To take the value of a particular cell in the grid
-int getCell(int i, int j) {return cell[i][j].value;}
+int cell[SIZE][SIZE];
 
 //Function to check whether a nunmber is valid for the box, row and column.
 bool checkSafe(int i, int j, int trialNumber)
@@ -51,7 +39,7 @@ bool checkSafe(int i, int j, int trialNumber)
         {
             if((i==l && j!=k) || (j==k && i!=l))
             {
-                if(getCell(l,k)==trialNumber) return FALSE;
+                if(cell[l][k]==trialNumber) return FALSE;
             }
         }
     }
@@ -59,13 +47,13 @@ bool checkSafe(int i, int j, int trialNumber)
     //Checking in jth column.
     for(int l=0;l<SIZE;l++)
     {
-        if((i!=l && (getCell(l,j)==trialNumber))) return FALSE;
+        if((i!=l && (cell[l][j]==trialNumber))) return FALSE;
     }
 
     //Checking in ith row.
     for(int l=0;l<SIZE;l++)
     {
-        if((j!=l && (getCell(i,l) == trialNumber))) return FALSE;
+        if((j!=l && (cell[i][l] == trialNumber))) return FALSE;
     }
     return TRUE;
 }
@@ -74,7 +62,7 @@ bool checkSafe(int i, int j, int trialNumber)
 //for now program is the user.
 void insert(int i,int j,int val)
 {
-    cell[i][j].readCell(val);
+    cell[i][j]=val;
 }
 
 //Manual input in program
@@ -85,43 +73,18 @@ void inputSudoku()
     {
         for(j=0;j<SIZE;j++)
         {
-            cell[i][j].fillCell(0);
+            cell[i][j]=0;
         }
     }
-    cell[0][1].readCell(6);
-    cell[0][3].readCell(3);
-    cell[0][6].readCell(8);
-    cell[0][8].readCell(4);
-    cell[1][0].readCell(5);
-    cell[1][1].readCell(3);
-    cell[1][2].readCell(7);
-    cell[1][4].readCell(9);
-    cell[2][1].readCell(4);
-    cell[2][5].readCell(6);
-    cell[2][6].readCell(3);
-    cell[2][8].readCell(7);
-    insert(3,1,9);
-    insert(3,4,5);
-    insert(3,1,9);
-    insert(3,6,2);
-    insert(3,7,3);
-    insert(3,8,8);
-    insert(5,0,7);
-    insert(5,1,1);
-    insert(5,2,3);
-    insert(5,3,6);
-    insert(5,4,2);
-    insert(5,7,4);
-    insert(6,0,3);
-    insert(6,2,6);
-    insert(6,3,4);
-    insert(6,7,1);
-    insert(7,4,6);
-    insert(7,6,5);
-    insert(7,7,2);
-    insert(7,8,3);
-    insert(8,0,1);
-    insert(8,2,2);insert(8,5,9);insert(8,7,8);
+    insert(0,1,6);insert(0,3,3);insert(0,8,6);insert(0,8,4);
+    insert(1,0,5);insert(1,1,3);insert(1,2,7);insert(1,4,9);
+    insert(2,1,4);insert(2,5,6);insert(2,6,3);insert(2,8,7);
+    insert(3,1,9);insert(3,4,5);insert(3,1,9);insert(3,6,2);
+    insert(3,7,3);insert(3,8,8);insert(5,0,7);insert(5,1,1);
+    insert(5,2,3);insert(5,3,6);insert(5,4,2);insert(5,7,4);
+    insert(6,0,3);insert(6,2,6);insert(6,3,4);insert(6,7,1);
+    insert(7,4,6);insert(7,6,5);insert(7,7,2);insert(7,8,3);
+    insert(8,0,1);insert(8,2,2);insert(8,5,9);insert(8,7,8);
 }
 
 
@@ -133,12 +96,11 @@ bool findUnassigned(int &row, int &col)
     {
         for(row=0;row<SIZE;row++)
         {
-            if(getCell(row,col)==0) {cout<<"row= col="<<row<<" "<<col<<"\n";return TRUE;}
+            if(cell[row][col]==0) {return TRUE;}
         }
     }
     return FALSE;
 }
-
 
 //Main solver function
 bool fillSudoku()
@@ -149,16 +111,16 @@ bool fillSudoku()
     {
         return TRUE;
     }
-    
+
     //Backtracking is used here.
     int num;
     for(num=1;num<SIZE+1;num++)
     {
             if(checkSafe(row,col,num))
             {
-                cell[row][col].fillCell(num);
+                cell[row][col]=num;
                 if(fillSudoku()) return TRUE;
-                cell[row][col].fillCell(0);
+                cell[row][col]=0;
             }
     }
     return FALSE;
@@ -171,7 +133,7 @@ void displaySudoku()
     {
         FOR(j,SIZE)
         {
-            cout<<getCell(i,j)<<" | ";
+            cout<<cell[i][j]<<" | ";
         }
         cout<<"\n";
     }
@@ -179,7 +141,7 @@ void displaySudoku()
 
 int main()
 {
-    memset(cell, 0, SIZE*SIZE*sizeof(sudokuCell));
+    memset(cell, 0, SIZE*SIZE*sizeof(int));
     inputSudoku();
     fillSudoku();
     displaySudoku();
