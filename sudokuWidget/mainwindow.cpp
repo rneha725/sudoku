@@ -123,6 +123,8 @@ void MainWindow::on_pushButton_pressed()
             //ui->tableWidget->item(row,column)->setBackgroundColor(Qt::red);
         }
     }
+    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 
@@ -141,4 +143,6 @@ void MainWindow::on_pushButton_2_clicked()
         FOR(j,SIZE) cell[i][j]=0;
     }
     ui->tableWidget->clear();
+    ui->tableWidget->setEditTriggers(QAbstractItemView::AllEditTriggers);
+    //ui->tableWidget->EditingState;
 }
