@@ -22,6 +22,7 @@
 using namespace std;
 
 int cell[9][9]={0};
+bool writable[9][9]={0};
 //memset(cell,0,9*9*sizeof(int));
 
 
@@ -109,28 +110,41 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+int doublePress=0;
+
 void MainWindow::on_pushButton_pressed()
 {
+    ui->tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+    doublePress++;
+    if(doublePress>=2) return;
+    FOR(i,SIZE)
+    {
+        FOR(j,SIZE)
+        {
+            if(cell[i][j]==0) writable[i][j]=1;
+            else writable[i][j]=0;
+        }
+    }
     fillSudoku();
     FOR(row,SIZE)
     {
         FOR(column,SIZE)
         {
-//          QString s=QString::number(cell[i][j]);
             QTableWidgetItem* newItem = new QTableWidgetItem();
             newItem->setText(QString::number(cell[row][column]));
             ui->tableWidget->setItem(row,column,newItem);
-            //ui->tableWidget->item(row,column)->setBackgroundColor(Qt::red);
+            if(writable[row][column]==1) ui->tableWidget->item(row,column)->setBackgroundColor(Qt::darkGreen);
+            else ui->tableWidget->item(row,column)->setBackgroundColor(Qt::red);
         }
     }
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 
 //Input sudoku
 void MainWindow::on_tableWidget_cellChanged(int row, int column)
 {
+    ui->tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
     QString str = ui->tableWidget->item(row,column)->text();
     cell[row][column]=str.toInt();
 }
@@ -144,5 +158,5 @@ void MainWindow::on_pushButton_2_clicked()
     }
     ui->tableWidget->clear();
     ui->tableWidget->setEditTriggers(QAbstractItemView::AllEditTriggers);
-    //ui->tableWidget->EditingState;
+    doublePress=0;
 }
