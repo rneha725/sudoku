@@ -1,9 +1,11 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <QTableWidget>
 #include <iostream>
+#include <cstdlib>
 #include <cstring>
 
+using namespace std;
+
+
+//Macros used.
 #define FOR(i,n) for(int i=0;i<n;i++)
 #define IFOR(i,a,n) for(int i=a;i<n;i++)
 #define FOR_(i,n) for(int i=n;i>0;i--)
@@ -19,13 +21,11 @@
 #define HEIGHT_BOX 3
 #define WIDTH_BOX 3
 
-using namespace std;
+namespace source{
 
-int cell[9][9]={0};
-//memset(cell,0,9*9*sizeof(int));
+int cell[SIZE][SIZE];
 
-
-//Fill Sudoku
+//Function to check whether a nunmber is valid for the box, row and column.
 bool checkSafe(int i, int j, int trialNumber)
 {
     if(i>SIZE-1 || j>SIZE-1 || i<0 || j<0) return FALSE;
@@ -59,6 +59,36 @@ bool checkSafe(int i, int j, int trialNumber)
     }
     return TRUE;
 }
+
+//Temporary function for inserting manual values by the program;
+//for now program is the user.
+void insert(int i,int j,int val)
+{
+    cell[i][j]=val;
+}
+
+//Manual input in program
+void inputSudoku()
+{
+    int i,j;
+    for(i=0;i<SIZE;i++)
+    {
+        for(j=0;j<SIZE;j++)
+        {
+            cell[i][j]=0;
+        }
+    }
+    insert(0,1,6);insert(0,3,3);insert(0,8,6);insert(0,8,4);
+    insert(1,0,5);insert(1,1,3);insert(1,2,7);insert(1,4,9);
+    insert(2,1,4);insert(2,5,6);insert(2,6,3);insert(2,8,7);
+    insert(3,1,9);insert(3,4,5);insert(3,1,9);insert(3,6,2);
+    insert(3,7,3);insert(3,8,8);insert(5,0,7);insert(5,1,1);
+    insert(5,2,3);insert(5,3,6);insert(5,4,2);insert(5,7,4);
+    insert(6,0,3);insert(6,2,6);insert(6,3,4);insert(6,7,1);
+    insert(7,4,6);insert(7,6,5);insert(7,7,2);insert(7,8,3);
+    insert(8,0,1);insert(8,2,2);insert(8,5,9);insert(8,7,8);
+}
+
 
 //Function to find next unassigned writable value in the grid; also
 //to check if grid is full or not.
@@ -98,42 +128,26 @@ bool fillSudoku()
     return FALSE;
 }
 
-
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+//Displays Sudoku.
+void displaySudoku()
 {
-    ui->setupUi(this);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-void MainWindow::on_pushButton_pressed()
-{
-    fillSudoku();
-    FOR(row,SIZE)
+    FOR(i,SIZE)
     {
-        FOR(column,SIZE)
+        FOR(j,SIZE)
         {
-//          QString s=QString::number(cell[i][j]);
-            QTableWidgetItem* newItem = new QTableWidgetItem();
-            newItem->setText(QString::number(cell[row][column]));
-            ui->tableWidget->setItem(row,column,newItem);
-            //ui->tableWidget->item(row,column)->setBackgroundColor(Qt::red);
+            cout<<cell[i][j]<<" | ";
         }
+        cout<<"\n";
     }
 }
 
-
-//Input sudoku
-void MainWindow::on_tableWidget_cellChanged(int row, int column)
-{
-    QString str = ui->tableWidget->item(row,column)->text();
-    cell[row][column]=str.toInt();
 }
-
-
-
-
+//int main()
+//{
+//    memset(cell, 0, SIZE*SIZE*sizeof(int));
+//    inputSudoku();
+//    fillSudoku();
+//    displaySudoku();
+//    return 0;
+//}
 

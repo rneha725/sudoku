@@ -17,6 +17,7 @@ public:
 
 private slots:
     void on_pushButton_pressed();
+    void on_tableWidget_cellChanged(int row, int column);
 
 private:
     Ui::MainWindow *ui;
