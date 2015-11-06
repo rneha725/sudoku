@@ -134,6 +134,11 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
 }
 
 
-
-
-
+void MainWindow::on_pushButton_2_clicked()
+{
+    FOR(i,SIZE)
+    {
+        FOR(j,SIZE) cell[i][j]=0;
+    }
+    ui->tableWidget->clear();
+}
