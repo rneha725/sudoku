@@ -81,6 +81,9 @@
     <property name="editTriggers">
      <set>QAbstractItemView::AllEditTriggers</set>
     </property>
+    <property name="tabKeyNavigation">
+     <bool>true</bool>
+    </property>
     <property name="selectionMode">
      <enum>QAbstractItemView::NoSelection</enum>
     </property>
@@ -219,7 +222,7 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>150</x>
       <y>340</y>
       <width>99</width>
       <height>27</height>
@@ -227,6 +230,19 @@
     </property>
     <property name="text">
      <string>Reset</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>340</y>
+      <width>99</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Quit</string>
     </property>
    </widget>
   </widget>
@@ -257,6 +273,12 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>tableWidget</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton_3</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

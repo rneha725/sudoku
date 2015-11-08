@@ -3,6 +3,8 @@
 #include <QTableWidget>
 #include <iostream>
 #include <cstring>
+#include <QMessageBox>
+#include <QEvent>
 
 #define FOR(i,n) for(int i=0;i<n;i++)
 #define IFOR(i,a,n) for(int i=a;i<n;i++)
@@ -29,6 +31,7 @@ bool writable[9][9]={0};
 //Fill Sudoku
 bool checkSafe(int i, int j, int trialNumber)
 {
+    if(trialNumber==0) return TRUE;
     if(i>SIZE-1 || j>SIZE-1 || i<0 || j<0) return FALSE;
     //box is the sub-grids in which a number cannot be repeated.
     int boxCol, boxRow;
@@ -140,15 +143,46 @@ void MainWindow::on_pushButton_pressed()
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
+#define WRONG_VALUE 1
+#define DUPLICATE 2
+
+void MainWindow::handleError(int i, int j, int n)
+{
+    QMessageBox *message = new QMessageBox();
+    message->setWindowTitle("Error");
+    n==1? message->setText("Out of range value.") :message->setText("Duplicate value");
+    message->setStandardButtons(QMessageBox::Ok);
+    message->setDefaultButton(QMessageBox::Ok);
+    message->setFocus();
+    if(message->exec()==QMessageBox::Ok)
+    {
+        ui->tableWidget->item(i,j)->setText("");
+        ui->tableWidget->item(i,j)->isSelected();
+        ui->tableWidget->setEditTriggers(QAbstractItemView::AllEditTriggers);
+        ui->tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+    }
+}
 
 //Input sudoku
 void MainWindow::on_tableWidget_cellChanged(int row, int column)
 {
     ui->tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
-    QString str = ui->tableWidget->item(row,column)->text();
-    cell[row][column]=str.toInt();
-}
+    ui->tableWidget->setEditTriggers(QAbstractItemView::AllEditTriggers);
 
+        QString str = ui->tableWidget->item(row,column)->text();
+        int number=str.toInt();
+        if(str =="");
+        else if(number>9 || number<1 )
+        {
+            handleError(row, column, WRONG_VALUE);
+        }
+        else if(!checkSafe(row,column, number)) handleError(row, column, DUPLICATE);
+        //all becomes writable.
+        if(checkSafe(row,column, number))
+        {
+            cell[row][column]=number;
+        }
+}
 
 void MainWindow::on_pushButton_2_clicked()
 {
@@ -157,6 +191,12 @@ void MainWindow::on_pushButton_2_clicked()
         FOR(j,SIZE) cell[i][j]=0;
     }
     ui->tableWidget->clear();
+    ui->tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
     ui->tableWidget->setEditTriggers(QAbstractItemView::AllEditTriggers);
     doublePress=0;
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    close();
 }
