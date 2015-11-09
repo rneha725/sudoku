@@ -8,6 +8,7 @@ Tasks are:
 - [x] Writing C++ bare code.  
 - [x] Installing softwares and components required to develop GUI application.  
 - [x] Learning basic things and writing simple programs in the environment.  
-- [ ] Implementing for Sudoku Solver. 
+- [x] Implementation for Sudoku Solver. 
+- [ ] Resolving issues.
  
 
