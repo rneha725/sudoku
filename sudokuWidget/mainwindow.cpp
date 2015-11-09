@@ -124,7 +124,7 @@ void MainWindow::on_pushButton_pressed()
     {
         FOR(j,SIZE)
         {
-            if(cell[i][j]==0) {writable[i][j]=1;ui->tableWidget->clearSelection();}
+            if(cell[i][j]==0) writable[i][j]=1;
             else writable[i][j]=0;
         }
     }
@@ -140,6 +140,7 @@ void MainWindow::on_pushButton_pressed()
             else ui->tableWidget->item(row,column)->setBackgroundColor(Qt::red);
         }
     }
+    ui->tableWidget->clearSelection();
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
