@@ -124,7 +124,7 @@ void MainWindow::on_pushButton_pressed()
     {
         FOR(j,SIZE)
         {
-            if(cell[i][j]==0) writable[i][j]=1;
+            if(cell[i][j]==0) {writable[i][j]=1;ui->tableWidget->clearSelection();}
             else writable[i][j]=0;
         }
     }
@@ -177,7 +177,6 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
             handleError(row, column, WRONG_VALUE);
         }
         else if(!checkSafe(row,column, number)) handleError(row, column, DUPLICATE);
-        //all becomes writable.
         if(checkSafe(row,column, number))
         {
             cell[row][column]=number;
