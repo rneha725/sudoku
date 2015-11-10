@@ -25,8 +25,6 @@ using namespace std;
 
 int cell[9][9]={0};
 bool writable[9][9]={0};
-//memset(cell,0,9*9*sizeof(int));
-
 
 //Fill Sudoku
 bool checkSafe(int i, int j, int trialNumber)
@@ -43,7 +41,7 @@ bool checkSafe(int i, int j, int trialNumber)
     {
         for(int l=boxRow; l<boxRow + HEIGHT_BOX;l++)
         {
-            if((i==l && j!=k) || (j==k && i!=l))
+            if(!(i==l && j==k))
             {
                 if(cell[l][k]==trialNumber) return FALSE;
             }
@@ -178,7 +176,8 @@ void MainWindow::on_tableWidget_cellChanged(int row, int column)
             handleError(row, column, WRONG_VALUE);
         }
         else if(!checkSafe(row,column, number)) handleError(row, column, DUPLICATE);
-        if(checkSafe(row,column, number))
+        //if error occurs and user demnads to solve it then don't
+        else if(checkSafe(row,column, number))
         {
             cell[row][column]=number;
         }

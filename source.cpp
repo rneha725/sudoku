@@ -37,7 +37,7 @@ bool checkSafe(int i, int j, int trialNumber)
     {
         for(int l=boxRow; l<boxRow + HEIGHT_BOX;l++)
         {
-            if((i==l && j!=k) || (j==k && i!=l))
+            if(!(i==l && j==k))
             {
                 if(cell[l][k]==trialNumber) return FALSE;
             }
@@ -76,15 +76,15 @@ void inputSudoku()
             cell[i][j]=0;
         }
     }
-    insert(0,1,6);insert(0,3,3);insert(0,8,6);insert(0,8,4);
-    insert(1,0,5);insert(1,1,3);insert(1,2,7);insert(1,4,9);
-    insert(2,1,4);insert(2,5,6);insert(2,6,3);insert(2,8,7);
-    insert(3,1,9);insert(3,4,5);insert(3,1,9);insert(3,6,2);
-    insert(3,7,3);insert(3,8,8);insert(5,0,7);insert(5,1,1);
-    insert(5,2,3);insert(5,3,6);insert(5,4,2);insert(5,7,4);
-    insert(6,0,3);insert(6,2,6);insert(6,3,4);insert(6,7,1);
-    insert(7,4,6);insert(7,6,5);insert(7,7,2);insert(7,8,3);
-    insert(8,0,1);insert(8,2,2);insert(8,5,9);insert(8,7,8);
+    insert(0,1,8);insert(0,5,7);insert(0,7,9);insert(0,8,5);
+    insert(1,0,3);insert(1,1,2);insert(1,4,8);insert(1,5,5);
+    insert(2,0,7);insert(2,1,5);insert(2,3,3);insert(2,4,6);
+    insert(3,2,6);insert(3,6,4);insert(3,8,3);
+    insert(4,2,3);insert(4,6,9);
+    insert(5,0,5);insert(5,2,2);insert(5,6,7);
+    insert(6,4,1);insert(6,5,3);insert(6,7,8);insert(6,8,4);
+    insert(7,3,7);insert(7,4,4);insert(7,7,3);insert(7,8,9);
+    insert(8,0,4);insert(8,1,3);insert(8,3,5);insert(8,7,6);
 }
 
 
@@ -138,6 +138,7 @@ void displaySudoku()
         cout<<"\n";
     }
 }
+
 
 int main()
 {
