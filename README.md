@@ -19,7 +19,7 @@ Tasks are:
 - [x] Implementation for Sudoku Solver. 
 - [x] Downloading OpenCV.
 - [x] Collecting Stuff for reading sudoku extraction.
-- [ ] Starting OpenCV coding.
+- [x] Done OpenCV coding.
 - [ ] Resolving issues.
  
 
